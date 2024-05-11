@@ -8,7 +8,7 @@ pip install -r requirements.txt
 ## How to start the server
 1. Start the redis
     ```bash
-    docker run -d --rm -p 6379:6379 redis:7
+    docker run --rm -p 6379:6379 redis:7
     ```
 2. Start the back-end
     ```bash
