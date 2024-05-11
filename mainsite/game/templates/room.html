@@ -1,13 +1,32 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <title>Game Room</title>
+    <link rel="stylesheet" href="{% static 'css/room.css' %}" />
   </head>
   <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"
+      crossorigin="anonymous"
+    ></script>
+
     {{ room_name|json_script:"room-name" }}
-    {% load static %}
+
+    <div id="liveView" class="videoView">
+      <div id="webcamBlock">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas class="webcamCanvas" id="webcamCanvas"></canvas>
+      </div>
+      <button id="webcamButton">ENABLE WEBCAM</button>
+    </div>
 
     <script src="{% static 'js/room.js' %}"></script>
+    <script type="module" src="{% static 'js/handlandmarker.js' %}"></script>
   </body>
 </html>

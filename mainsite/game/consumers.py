@@ -40,10 +40,10 @@ class GameConsumer(WebsocketConsumer):
             {'procedure-code': 'setuid', 'uid': self.uid}))
 
     def disconnect(self, code):
-        self.game_session['engine'].rm_user(self.uid)
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
+        self.game_session['engine'].rm_user(self.uid)
         self.game_session['users'].remove(self.uid)
         self.game_session['consumers'].pop(self.uid)
 

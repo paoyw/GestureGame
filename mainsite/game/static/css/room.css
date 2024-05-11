@@ -1,0 +1,31 @@
+video {
+  clear: both;
+  display: block;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+
+.webcamCanvas {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+
+#webcamBlock {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#webcam {
+  position: absolute;
+}
+
+#webcamButton {
+  margin: 5px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+}
