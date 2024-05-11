@@ -1,0 +1,5 @@
+__pycache__/
+*.py[d,c,o]
+
+__MACOSX/
+.DS_store
