@@ -21,4 +21,4 @@ class Engine:
         pass
 
     def get_game_state(self):
-        pass
+        return self.game_state
