@@ -14,7 +14,7 @@ function setuid(new_uid) {
 }
 
 function setmasteruid() {
-  masterInterval = setInterval(cal_frame, 5000);
+  masterInterval = setInterval(cal_frame, 100);
 }
 
 function cal_frame() {
@@ -22,7 +22,6 @@ function cal_frame() {
 }
 
 function render(game_state) {
-  console.log("RENDER", game_state);
   document.getElementById("game-state-text").innerText = JSON.stringify(game_state);
 }
 
@@ -44,7 +43,6 @@ registeredNotifiers.push(new SetActNotifier());
 
 webSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-  console.log(data);
   switch (data["procedure-code"]) {
     case "setuid":
       setuid(data["uid"]);
