@@ -21,15 +21,15 @@ class GameConsumer(WebsocketConsumer):
 
         if self.room_name in game_sessions:
             self.game_session = game_sessions[self.room_name]
-            self.uid = self.game_session['users'][-1] + 1
+            self.uid = str(int(self.game_session['users'][-1]) + 1)
             self.game_session['users'].append(self.uid)
             self.game_session['consumers'][self.uid] = self
             self.game_session['engine'].add_user(self.uid)
         else:
-            self.uid = 0
-            self.game_session = {'masteruid': 0,
-                                 'users': [0],
-                                 'consumers': {0: self},
+            self.uid = '0'
+            self.game_session = {'masteruid': self.uid,
+                                 'users': [self.uid],
+                                 'consumers': {self.uid: self},
                                  'engine': engine.Engine(self.room_name)}
             game_sessions[self.room_name] = self.game_session
             self.game_session['engine'].add_user(self.uid)
@@ -39,6 +39,12 @@ class GameConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(
             {'procedure-code': 'setuid', 'uid': self.uid}))
 
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {"type": "game.message",
+             "game_state": self.game_session['engine'].get_game_state()}
+        )
+
     def disconnect(self, code):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
@@ -47,12 +53,21 @@ class GameConsumer(WebsocketConsumer):
         self.game_session['users'].remove(self.uid)
         self.game_session['consumers'].pop(self.uid)
 
-        if not self.game_session['users']:
+        if len(self.game_session['users']) == 0:
             game_sessions.pop(self.room_name)
         elif self.uid == self.game_session['masteruid']:
+            print('set new uid')
             self.game_session['masteruid'] = self.game_session['users'][0]
             self.game_session['consumers'][self.game_session['masteruid']].send(
-                text_data=json.dumps({'procedure-code': 'setmasteruid', 'uid':  self.game_session['masteruid']}))
+                text_data=json.dumps({'procedure-code': 'setmasteruid',
+                                      'uid':  self.game_session['masteruid']}))
+        
+        if len(self.game_session['users']):
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {"type": "game.message",
+                "game_state": self.game_session['engine'].get_game_state()}
+            )
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -66,11 +81,11 @@ class GameConsumer(WebsocketConsumer):
                      "game_state": game_state}
                 )
             case 'setact':
-                print(text_data_json['action'])
                 self.game_session['engine'].set_action(self.uid,
                                                        text_data_json['action'])
             case _:
                 print('Unsupport action.')
 
     def game_message(self, event):
-        self.send(text_data=json.dumps({"procedure-code": "render", "game_state": event["game_state"]}))
+        self.send(text_data=json.dumps(
+            {"procedure-code": "render", "game_state": event["game_state"]}))
