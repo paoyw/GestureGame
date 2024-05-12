@@ -1,3 +1,5 @@
+import { registeredNotifiers } from "./handlandmarker.js";
+
 const roomName = JSON.parse(document.getElementById("room-name").textContent);
 
 const webSocket = new WebSocket(
@@ -12,20 +14,33 @@ function setuid(new_uid) {
 }
 
 function setmasteruid() {
-  masterInterval = setInterval(cal_frame, 1000);
+  masterInterval = setInterval(cal_frame, 5000);
 }
 
 function cal_frame() {
   webSocket.send(JSON.stringify({ uid: uid, "procedure-code": "cal_frame" }));
 }
 
-function render(game_state) {}
+function render(game_state) {
+  console.log("RENDER", game_state);
+  document.getElementById("game-state-text").innerText = JSON.stringify(game_state);
+}
 
 function setact(act) {
   webSocket.send(
     JSON.stringify({ uid: uid, "procedure-code": "setact", action: act })
   );
 }
+
+class SetActNotifier {
+  constructor() {
+    this.notify = (act) => {
+      setact(act);
+    };
+  }
+}
+
+registeredNotifiers.push(new SetActNotifier());
 
 webSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);

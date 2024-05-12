@@ -7,6 +7,7 @@ let handLandmarker = undefined;
 let runningMode = "Video";
 let enableWebcamButton;
 let webcamRunning = false;
+export var registeredNotifiers = new Array();
 
 const createHandLandmarker = async () => {
   const vision = await FilesetResolver.forVisionTasks(
@@ -97,13 +98,23 @@ async function predictWebcam() {
     if (results.landmarks.length == 1) {
       // console.log(results);
       controllOneHandMode(
-        new Hand(results.handednesses[0][0].categoryName, results.landmarks[0])
+        new Hand(
+          results.handednesses[0][0].categoryName == "Right" ? "Left" : "Right",
+          results.landmarks[0]
+        )
       );
     } else if (results.landmarks.length >= 2) {
-      controllTwoHandMode([
-        new Hand(results.handednesses[0][0].categoryName, results.landmarks[0]),
-        new Hand(results.handednesses[1][0].categoryName, results.landmarks[1]),
-      ]);
+      if (results.handednesses[0][0].categoryName == "Right") {
+        controllTwoHandMode(
+          new Hand("Left", results.landmarks[0]),
+          new Hand("Right", results.landmarks[1])
+        );
+      } else {
+        controllTwoHandMode(
+          new Hand("Left", results.landmarks[1]),
+          new Hand("Right", results.landmarks[0])
+        );
+      }
     }
     canvasCtx.restore();
     // Call this function again to keep predicting when the browser is ready.
@@ -117,13 +128,65 @@ class Hand {
   constructor(handness, landmarks) {
     this.handness = handness;
     this.landmarks = landmarks;
+
+    this.centroid = () => {
+      let result = { x: 0, y: 0, z: 0 };
+      this.landmarks.forEach((e) => {
+        result.x += e.x / this.landmarks.length;
+        result.y += e.y / this.landmarks.length;
+        result.z += e.z / this.landmarks.length;
+      });
+      return result;
+    };
+
+    this.threeCentroid = () => {
+      let result = { x: 0, y: 0, z: 0 };
+      for (var i in [4, 8, 12]) {
+        result.x += this.landmarks[i].x / 3;
+        result.y += this.landmarks[i].y / 3;
+        result.z += this.landmarks[i].z / 3;
+      }
+      return result;
+    };
+
+    this.pointDist = (point0, point1) => {
+      return Math.sqrt((point0.x - point1.x) ** 2 + (point0.y - point1.y) ** 2);
+    };
+
+    this.threeClose = () => {
+      let totalDist =
+        this.pointDist(this.landmarks[4], this.landmarks[8]) +
+        this.pointDist(this.landmarks[8], this.landmarks[12]) +
+        this.pointDist(this.landmarks[12], this.landmarks[4]);
+      return totalDist < 0.2;
+    };
   }
 }
 
 function controllOneHandMode(hand) {
-  console.log(hand);
+  let result = { delta_x: 0, delta_y: 0, theta: 0, fire: false };
+  let centroid = hand.threeCentroid();
+  result.theta = Math.atan2(centroid.y - 0.5, 0.5 - centroid.x);
+  result.fire = hand.threeClose();
+  registeredNotifiers.forEach((e) => {
+    e.notify(result);
+  });
 }
 
-function controllTwoHandMode(hands) {
-  console.log(hands);
+function controllTwoHandMode(leftHand, rightHand) {
+  let result = { delta_x: 0, delta_y: 0, theta: 0, fire: false };
+  let leftCentroid = leftHand.threeCentroid();
+  let rightCentroid = rightHand.threeCentroid();
+  leftCentroid.x = 1 - leftCentroid.x;
+  rightCentroid.x = 1 - rightCentroid.x;
+  result.delta_x = (leftCentroid.x + rightCentroid.x) / 2 - 0.5;
+  result.delta_y = (leftCentroid.y + rightCentroid.y) / 2 - 0.5;
+  result.theta = Math.atan2(
+    rightCentroid.y - leftCentroid.y,
+    rightCentroid.x - leftCentroid.x
+  ) - Math.PI / 2;
+  result.fire = leftHand.threeClose() || rightHand.threeClose();
+  registeredNotifiers.forEach((e) => {
+    e.notify(result);
+  });
 }

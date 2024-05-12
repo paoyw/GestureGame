@@ -18,6 +18,7 @@
 
     {{ room_name|json_script:"room-name" }}
 
+    <textarea id="game-state-text" style="width: 320px; height: 100px;"></textarea>
     <div id="liveView" class="videoView">
       <div id="webcamBlock">
         <video id="webcam" autoplay playsinline></video>
@@ -26,7 +27,6 @@
       <button id="webcamButton">ENABLE WEBCAM</button>
     </div>
 
-    <script src="{% static 'js/room.js' %}"></script>
-    <script type="module" src="{% static 'js/handlandmarker.js' %}"></script>
+    <script type="module" src="{% static 'js/room.js' %}"></script>
   </body>
 </html>

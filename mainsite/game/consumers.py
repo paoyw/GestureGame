@@ -66,10 +66,11 @@ class GameConsumer(WebsocketConsumer):
                      "game_state": game_state}
                 )
             case 'setact':
+                print(text_data_json['action'])
                 self.game_session['engine'].set_action(self.uid,
                                                        text_data_json['action'])
             case _:
                 print('Unsupport action.')
 
     def game_message(self, event):
-        self.send(text_data=json.dumps({"game_state": event["game_state"]}))
+        self.send(text_data=json.dumps({"procedure-code": "render", "game_state": event["game_state"]}))
