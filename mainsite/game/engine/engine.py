@@ -34,7 +34,26 @@ class Engine:
         self.game_state['users'][uid].set_action(act)
 
     def cal_frame(self):
-        pass
+        """
+        TODO:
+        1. Calculate the next state for each user by Spaceship.cal_frame.
+            1. Translation
+            2. Rotation
+            3. Fire
+        2. Calculate the next state for each bullet/rock/point by object.cal_frame.
+            1. Translation
+        3. Collision detection between each user and the bullets/rocks/points.
+            1. Collision detection by self.is_collided
+            2. Object remove from self.game_state
+        """
+
+    def distance(self, object0, object1):
+        return ((object0.x - object1.x) ** 2 +
+                (object0.x - object1.x) ** 2) ** 0.5
+
+    def is_collided(self, object0, object1):
+        return self.distance(object0, object1) \
+            < (object0.radius + object1.radius)
 
     def get_game_state(self):
         return {

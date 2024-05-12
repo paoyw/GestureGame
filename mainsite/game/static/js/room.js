@@ -23,6 +23,7 @@ function cal_frame() {
 
 function render(game_state) {
   document.getElementById("game-state-text").innerText = JSON.stringify(game_state);
+  // TODO: Renders the game state.
 }
 
 function setact(act) {
