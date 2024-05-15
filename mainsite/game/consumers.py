@@ -61,30 +61,29 @@ class GameConsumer(WebsocketConsumer):
             self.game_session['consumers'][self.game_session['masteruid']].send(
                 text_data=json.dumps({'procedure-code': 'setmasteruid',
                                       'uid':  self.game_session['masteruid']}))
-        
+
         if len(self.game_session['users']):
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {"type": "game.message",
-                "game_state": self.game_session['engine'].get_game_state()}
+                 "game_state": self.game_session['engine'].get_game_state()}
             )
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        match text_data_json['procedure-code']:
-            case 'cal_frame':
-                self.game_session['engine'].cal_frame()
-                game_state = self.game_session['engine'].get_game_state()
-                async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {"type": "game.message",
-                     "game_state": game_state}
-                )
-            case 'setact':
-                self.game_session['engine'].set_action(self.uid,
-                                                       text_data_json['action'])
-            case _:
-                print('Unsupport action.')
+        if text_data_json['procedure-code'] == 'cal_frame':
+            self.game_session['engine'].cal_frame()
+            game_state = self.game_session['engine'].get_game_state()
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {"type": "game.message",
+                 "game_state": game_state}
+            )
+        elif text_data_json['procedure-code'] == 'setact':
+            self.game_session['engine'].set_action(self.uid,
+                                                   text_data_json['action'])
+        else:
+            print('Unsupport action.')
 
     def game_message(self, event):
         self.send(text_data=json.dumps(
