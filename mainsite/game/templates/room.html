@@ -18,7 +18,17 @@
 
     {{ room_name|json_script:"room-name" }}
 
-    <textarea id="game-state-text" style="width: 320px; height: 100px;"></textarea>
+    <textarea
+      id="game-state-text"
+      style="width: 320px; height: 100px"
+    ></textarea>
+    <hr />
+    <canvas
+      id="game-area-canvas"
+      width="800"
+      height="500"
+      style="background-color: #2e3440"
+    ></canvas>
     <div id="liveView" class="videoView">
       <div id="webcamBlock">
         <video id="webcam" autoplay playsinline></video>
