@@ -47,6 +47,19 @@ class Engine:
             2. Object remove from self.game_state
         """
 
+        for uid in self.game_state["users"]:
+            user = self.game_state["users"][uid]
+            user.cal_frame(self.game_state)
+
+        bullet_live = []
+        for i, bullet in enumerate(self.game_state["bullets"]):
+            bullet.cal_frame(self.game_state)
+            if not bullet.expired:
+                bullet_live.append(i)
+        self.game_state["bullets"] = [self.game_state["bullets"][l] for l in bullet_live]
+
+        
+
     def distance(self, object0, object1):
         return ((object0.x - object1.x) ** 2 +
                 (object0.x - object1.x) ** 2) ** 0.5
@@ -58,4 +71,5 @@ class Engine:
     def get_game_state(self):
         return {
             'users': {k: vars(v) for k, v in self.game_state['users'].items()},
+            'bullets': [vars(b) for b in self.game_state['bullets']],
         }

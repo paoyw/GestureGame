@@ -1,4 +1,5 @@
 from . import consts
+import math
 
 
 class Spaceship():
@@ -20,13 +21,24 @@ class Spaceship():
         self.delta_y = act['delta_y']
         if act['fire'] and self.fire_timer == 0:
             self.fire = True
+        else:
+            self.fire = False
 
     def cal_frame(self, game_state):
-        self.x = min(max(0, self.x + self.delta_x), consts.AREA_WIDTH)
-        self.y = min(max(0, self.y + self.delta_y), consts.AREA_HEIGHT)
+        self.x = min(max(0, self.x + self.delta_x * consts.USER_SPEED), consts.AREA_WIDTH)
+        self.y = min(max(0, self.y + self.delta_y * consts.USER_SPEED), consts.AREA_HEIGHT)
 
         if self.fire:
             self.fire_timer = consts.SPACESHIP_FIRE_TIME
+            bullet = Bullet(
+                uid=self.uid, 
+                x=self.x, 
+                y=self.y, 
+                delta_x=math.cos(self.theta) * consts.BULLET_SPEED,
+                delta_y=math.sin(self.theta) * consts.BULLET_SPEED,
+            )
+            game_state["bullets"].append(bullet)
+            self.fire = False
         else:
             self.fire_timer = max(0, self.fire_timer - 1)
 
@@ -40,9 +52,15 @@ class Bullet():
         self.delta_y = delta_y
 
         self.radius = consts.BULLET_RADIUS
+        self.timer = consts.BULLET_TIMER
+        self.expired = False
 
     def cal_frame(self, game_state):
-        return
+        self.x = min(max(0, self.x + self.delta_x), consts.AREA_WIDTH)
+        self.y = min(max(0, self.y + self.delta_y), consts.AREA_HEIGHT)
+        if self.timer <= 0 or self.x == 0 or self.y == 0 or self.x == consts.AREA_WIDTH or self.y == consts.AREA_HEIGHT:
+            self.expired = True
+        self.timer -= 1
 
 
 class Rock():
