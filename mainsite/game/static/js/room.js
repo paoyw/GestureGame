@@ -80,6 +80,17 @@ function render(game_state) {
       2 * Math.PI
     );
     ctx.fill();
+    
+    ctx.beginPath();
+    ctx.fillStyle = const_values.HEALTH_COLOR;
+    ctx.lineWidth = 1e-15;
+    ctx.rect(
+      spaceShip.x - origin_x + const_values.HEALTH_X_SHIFT,
+      spaceShip.y - origin_y + const_values.HEALTH_Y_SHIFT,
+      (spaceShip.health / spaceShip.max_health) * spaceShip.radius * 2,
+      const_values.HEALTH_HEIGHT,
+    );
+    ctx.fill();
   }
 }
 
