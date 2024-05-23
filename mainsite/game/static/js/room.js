@@ -16,12 +16,38 @@ const map_ctx = map_canvas.getContext("2d");
 var uid = undefined;
 var masterInterval = undefined;
 
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 function setuid(new_uid) {
   uid = new_uid;
 }
 
 function setmasteruid() {
   masterInterval = setInterval(cal_frame, 50);
+}
+
+function getusername(username) {
+  webSocket.send(
+    JSON.stringify({
+      uid: uid,
+      "procedure-code": "setusername",
+      username: username,
+    })
+  );
 }
 
 function cal_frame() {
@@ -91,8 +117,8 @@ function render(game_state) {
     map_ctx.beginPath();
     map_ctx.lineWidth = 1e-15;
     map_ctx.arc(
-      spaceShip.x * const_values.MAP_WIDTH / const_values.AREA_WIDTH,
-      spaceShip.y * const_values.MAP_HEIGHT / const_values.AREA_HEIGHT,
+      (spaceShip.x * const_values.MAP_WIDTH) / const_values.AREA_WIDTH,
+      (spaceShip.y * const_values.MAP_HEIGHT) / const_values.AREA_HEIGHT,
       const_values.MAP_SPACESHIP_RADIUS,
       0,
       2 * Math.PI
@@ -109,6 +135,14 @@ function render(game_state) {
       const_values.HEALTH_HEIGHT
     );
     ctx.fill();
+    
+    ctx.fillStyle = const_values.USERNAME_COLOR;
+    ctx.font = const_values.USERNAME_FONT;
+    ctx.fillText(
+      spaceShip.username,
+      spaceShip.x - origin_x + const_values.USERNAME_X_SHIFT,
+      spaceShip.y - origin_y + const_values.USERNAME_Y_SHIFT
+    );
   }
 }
 
@@ -140,9 +174,12 @@ webSocket.onmessage = function (e) {
     case "render":
       render(data["game_state"]);
       break;
+    case "getusername":
+      getusername(getCookie("username"));
+      break;
   }
 };
 
 webSocket.onclose = function (e) {
-  console.error("Chat socket closed unexpectedly");
+  console.error("Web socket closed unexpectedly");
 };

@@ -38,6 +38,8 @@ class GameConsumer(WebsocketConsumer):
 
         self.send(text_data=json.dumps(
             {'procedure-code': 'setuid', 'uid': self.uid}))
+        self.send(text_data=json.dumps(
+            {'procedure-code': 'getusername', 'uid': self.uid}))
 
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -82,6 +84,9 @@ class GameConsumer(WebsocketConsumer):
         elif text_data_json['procedure-code'] == 'setact':
             self.game_session['engine'].set_action(self.uid,
                                                    text_data_json['action'])
+        elif text_data_json['procedure-code'] == 'setusername':
+            self.game_session['engine'].set_username(self.uid,
+                                                     text_data_json['username'])
         else:
             print('Unsupport action.')
 

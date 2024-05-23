@@ -14,3 +14,7 @@ export const HEALTH_X_SHIFT = -30;
 export const HEALTH_Y_SHIFT = -45;
 export const HEALTH_HEIGHT = 10;
 export const BULLET_COLOR = "#e5e9f0";
+export const USERNAME_COLOR = "#d8dee9";
+export const USERNAME_FONT = "15px bold Ariel";
+export const USERNAME_X_SHIFT = -30;
+export const USERNAME_Y_SHIFT = -50;

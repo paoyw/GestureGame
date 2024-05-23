@@ -33,6 +33,11 @@ class Engine:
             return
         self.game_state['users'][uid].set_action(act)
 
+    def set_username(self, uid, username):
+        if uid not in self.game_state['users']:
+            return
+        self.game_state['users'][uid].set_username(username)
+
     def cal_frame(self):
         """
         TODO:

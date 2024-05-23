@@ -6,6 +6,7 @@ import random
 class Spaceship():
     def __init__(self, uid, x=0, y=0, theta=0, delta_x=0, delta_y=0):
         self.uid = uid
+        self.username = ''
         self.x = x
         self.y = y
         self.theta = theta
@@ -36,6 +37,9 @@ class Spaceship():
             self.fire = True
         else:
             self.fire = False
+
+    def set_username(self, username):
+        self.username = username
 
     def cal_frame(self, game_state):
         self.x = min(max(0, self.x + self.delta_x * consts.USER_SPEED), consts.AREA_WIDTH)
