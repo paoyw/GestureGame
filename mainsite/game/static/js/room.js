@@ -35,39 +35,15 @@ function render(game_state) {
   let origin_x = game_state["users"][uid].x - const_values.VIEW_WIDTH / 2;
   let origin_y = game_state["users"][uid].y - const_values.VIEW_HEIGHT / 2;
 
-  // Draws points.
-  for (var i in game_state["points"]) {
-    let point = game_state["points"][i];
-    ctx.beginPath();
-    ctx.fillStyle = const_values.POINT_COLOR;
-    ctx.lineWidth = 1e-15;
-    ctx.arc(
-      point.x - origin_x,
-      point.y - origin_y,
-      point.radius,
-      0,
-      2 * Math.PI
-    );
-    ctx.stroke();
-    ctx.fill();
-  }
-
-  // Draws rocks.
-  for (var i in game_state["rocks"]) {
-    let rock = game_state["rocks"][i];
-    ctx.beginPath();
-    ctx.fillStyle = const_values.ROCK_COLOR;
-    ctx.lineWidth = 1e-15;
-    ctx.arc(
-      rock.x - origin_x,
-      rock.y - origin_y,
-      rock.radius,
-      0,
-      2 * Math.PI
-    );
-    ctx.stroke();
-    ctx.fill();
-  }
+  ctx.beginPath();
+  ctx.fillStyle = const_values.BACKGROUND_COLOR;
+  ctx.rect(
+    0 - origin_x,
+    0 - origin_y,
+    const_values.AREA_WIDTH,
+    const_values.AREA_HEIGHT
+  );
+  ctx.fill();
 
   //Draws bullets.
   for (var i in game_state["bullets"]) {
@@ -90,7 +66,11 @@ function render(game_state) {
   for (var i in game_state["users"]) {
     let spaceShip = game_state["users"][i];
     ctx.beginPath();
-    ctx.fillStyle = const_values.SPACESHIP_COLOR;
+    if (spaceShip['uid'] == uid)
+      ctx.fillStyle = const_values.SPACESHIP_SELF_COLOR;
+    else
+      ctx.fillStyle = const_values.SPACESHIP_OPPO_COLOR;
+
     ctx.lineWidth = 1e-15;
     ctx.arc(
       spaceShip.x - origin_x,
