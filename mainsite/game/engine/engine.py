@@ -58,6 +58,8 @@ class Engine:
             bullet.cal_frame(self.game_state)
             for uid in self.game_state["users"]:
                 user = self.game_state["users"][uid]
+                if bullet.uid == uid:
+                    continue
                 if self.is_collided(bullet, user):
                     if bullet.uid != uid:
                         user.health -= consts.BULLET_DAMAGE
