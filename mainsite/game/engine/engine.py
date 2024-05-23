@@ -57,11 +57,10 @@ class Engine:
         for i, bullet in enumerate(self.game_state["bullets"]):
             bullet.cal_frame(self.game_state)
             for uid in self.game_state["users"]:
-                if bullet.uid == uid:
-                    continue
                 user = self.game_state["users"][uid]
                 if self.is_collided(bullet, user):
-                    user.health -= consts.BULLET_DAMAGE
+                    if bullet.uid != uid:
+                        user.health -= consts.BULLET_DAMAGE
                     bullet.expired = True
             if not bullet.expired:
                 bullet_live.append(i)
