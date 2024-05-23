@@ -50,19 +50,28 @@ class Engine:
         for uid in self.game_state["users"]:
             user = self.game_state["users"][uid]
             user.cal_frame(self.game_state)
+            if user.health <= 0:
+                user.reset()
 
         bullet_live = []
         for i, bullet in enumerate(self.game_state["bullets"]):
             bullet.cal_frame(self.game_state)
+            for uid in self.game_state["users"]:
+                if bullet.uid == uid:
+                    continue
+                user = self.game_state["users"][uid]
+                if self.is_collided(bullet, user):
+                    user.health -= consts.BULLET_DAMAGE
+                    bullet.expired = True
             if not bullet.expired:
                 bullet_live.append(i)
         self.game_state["bullets"] = [self.game_state["bullets"][l] for l in bullet_live]
 
-        
+
 
     def distance(self, object0, object1):
         return ((object0.x - object1.x) ** 2 +
-                (object0.x - object1.x) ** 2) ** 0.5
+                (object0.y - object1.y) ** 2) ** 0.5
 
     def is_collided(self, object0, object1):
         return self.distance(object0, object1) \

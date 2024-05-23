@@ -1,5 +1,6 @@
 from . import consts
 import math
+import random
 
 
 class Spaceship():
@@ -14,6 +15,18 @@ class Spaceship():
         self.fire_timer = 0
 
         self.radius = consts.SPACESHIP_RADIUS
+        self.max_health = consts.USER_HEALTH
+        self.health = consts.USER_HEALTH
+
+    def reset(self):
+        self.x = random.randint(0, consts.AREA_WIDTH)
+        self.y = random.randint(0, consts.AREA_HEIGHT)
+        self.theta = 2 * random.random() * math.pi
+        self.fire = False
+        self.fire_timer = 0
+        self.delta_x = 0
+        self.delta_y = 0
+        self.health = consts.USER_HEALTH
 
     def set_action(self, act):
         self.theta = act['theta']
@@ -27,6 +40,8 @@ class Spaceship():
     def cal_frame(self, game_state):
         self.x = min(max(0, self.x + self.delta_x * consts.USER_SPEED), consts.AREA_WIDTH)
         self.y = min(max(0, self.y + self.delta_y * consts.USER_SPEED), consts.AREA_HEIGHT)
+        self.delta_x = 0
+        self.delta_y = 0
 
         if self.fire:
             self.fire_timer = consts.SPACESHIP_FIRE_TIME
@@ -58,7 +73,11 @@ class Bullet():
     def cal_frame(self, game_state):
         self.x = min(max(0, self.x + self.delta_x), consts.AREA_WIDTH)
         self.y = min(max(0, self.y + self.delta_y), consts.AREA_HEIGHT)
-        if self.timer <= 0 or self.x == 0 or self.y == 0 or self.x == consts.AREA_WIDTH or self.y == consts.AREA_HEIGHT:
+        if self.x == 0 or self.x == consts.AREA_WIDTH:
+            self.delta_x *= -1
+        if self.y == 0 or self.y == consts.AREA_HEIGHT:
+            self.delta_y *= -1
+        if self.timer <= 0:
             self.expired = True
         self.timer -= 1
 
