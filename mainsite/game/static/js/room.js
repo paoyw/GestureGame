@@ -10,6 +10,9 @@ const webSocket = new WebSocket(
 const canvas = document.getElementById("game-area-canvas");
 const ctx = canvas.getContext("2d");
 
+const map_canvas = document.getElementById("game-map-canvas");
+const map_ctx = map_canvas.getContext("2d");
+
 var uid = undefined;
 var masterInterval = undefined;
 
@@ -30,6 +33,7 @@ function render(game_state) {
     JSON.stringify(game_state);
   // TODO: Renders the game state.
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  map_ctx.clearRect(0, 0, map_canvas.width, map_canvas.height);
 
   // Computes the center position.
   let origin_x = game_state["users"][uid].x - const_values.VIEW_WIDTH / 2;
@@ -66,10 +70,13 @@ function render(game_state) {
   for (var i in game_state["users"]) {
     let spaceShip = game_state["users"][i];
     ctx.beginPath();
-    if (spaceShip['uid'] == uid)
+    if (spaceShip["uid"] == uid) {
       ctx.fillStyle = const_values.SPACESHIP_SELF_COLOR;
-    else
+      map_ctx.fillStyle = const_values.SPACESHIP_SELF_COLOR;
+    } else {
       ctx.fillStyle = const_values.SPACESHIP_OPPO_COLOR;
+      map_ctx.fillStyle = const_values.SPACESHIP_OPPO_COLOR;
+    }
 
     ctx.lineWidth = 1e-15;
     ctx.arc(
@@ -80,7 +87,18 @@ function render(game_state) {
       2 * Math.PI
     );
     ctx.fill();
-    
+
+    map_ctx.beginPath();
+    map_ctx.lineWidth = 1e-15;
+    map_ctx.arc(
+      spaceShip.x * const_values.MAP_WIDTH / const_values.AREA_WIDTH,
+      spaceShip.y * const_values.MAP_HEIGHT / const_values.AREA_HEIGHT,
+      const_values.MAP_SPACESHIP_RADIUS,
+      0,
+      2 * Math.PI
+    );
+    map_ctx.fill();
+
     ctx.beginPath();
     ctx.fillStyle = const_values.HEALTH_COLOR;
     ctx.lineWidth = 1e-15;
@@ -88,7 +106,7 @@ function render(game_state) {
       spaceShip.x - origin_x + const_values.HEALTH_X_SHIFT,
       spaceShip.y - origin_y + const_values.HEALTH_Y_SHIFT,
       (spaceShip.health / spaceShip.max_health) * spaceShip.radius * 2,
-      const_values.HEALTH_HEIGHT,
+      const_values.HEALTH_HEIGHT
     );
     ctx.fill();
   }
