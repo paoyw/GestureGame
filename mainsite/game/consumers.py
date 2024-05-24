@@ -4,7 +4,6 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 from .engine import engine
-
 game_sessions = {}
 
 
@@ -40,7 +39,7 @@ class GameConsumer(WebsocketConsumer):
             {'procedure-code': 'setuid', 'uid': self.uid}))
         self.send(text_data=json.dumps(
             {'procedure-code': 'getusername', 'uid': self.uid}))
-
+        
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {"type": "game.message",
@@ -87,9 +86,27 @@ class GameConsumer(WebsocketConsumer):
         elif text_data_json['procedure-code'] == 'setusername':
             self.game_session['engine'].set_username(self.uid,
                                                      text_data_json['username'])
+        elif text_data_json['procedure-code'] == 'textprocessing':
+            message = text_data_json['message']
+            uid = text_data_json['uid']
+            game_state = self.game_session['engine'].get_game_state()
+            username = game_state['users'][uid]['username']
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,{
+                    "type" : "chat.message" ,
+                    "message" : message , 
+                    "username" : username, 
+                }
+            )
         else:
             print('Unsupport action.')
 
     def game_message(self, event):
         self.send(text_data=json.dumps(
             {"procedure-code": "render", "game_state": event["game_state"]}))
+    
+    def chat_message(self, event):
+        self.send(text_data=json.dumps(
+            {"procedure-code": "textprint", "message":event["message"], "username":event["username"]}
+        ))
+    # async def 
