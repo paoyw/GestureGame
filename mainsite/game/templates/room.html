@@ -18,37 +18,31 @@
 
     {{ room_name|json_script:"room-name" }}
 
-    <textarea
-      id="game-state-text"
-      style="width: 320px; height: 100px"
-    ></textarea>
-    <hr />
-    <canvas
-      id="game-area-canvas"
-      width="800"
-      height="500"
-      style="background-color: #2e3440"
-    ></canvas>
-    <canvas
-      id="game-map-canvas"
-      width="160"
-      height="100"
-      style="background-color: #3b4252"
-    ></canvas>
-    <div id="liveView" class="videoView">
-      <div id="webcamBlock">
-        <video id="webcam" autoplay playsinline></video>
-        <canvas class="webcamCanvas" id="webcamCanvas"></canvas>
+    <div class="container">
+      <div class="left-side">
+        <div class="game-area-wrapper">
+          <canvas id="game-area-canvas" width="800" height="500"></canvas>
+          <div class="webcam-and-map">
+            <div id="liveView" class="videoView">
+              <div id="webcamBlock">
+                <video id="webcam" autoplay playsinline></video>
+                <canvas class="webcamCanvas" id="webcamCanvas"></canvas>
+              </div>
+              <button id="webcamButton">ENABLE WEBCAM</button>
+            </div>
+            <canvas id="game-map-canvas" width="160" height="100"></canvas>
+          </div>
+        </div>
       </div>
-      <button id="webcamButton">ENABLE WEBCAM</button>
+      <div class="right-side">
+        <div id="chatroom"></div>
+        <div class="form-container">
+          <input type="text" id="draft" placeholder="Enter your message here">
+          <button id="textsubmit">Send</button>
+        </div>
+        <div id="game-state-text" class="game-state-text"></div>
+      </div>
     </div>
-    <div class="form-container">
-      <input type="text" id="draft" placeholder="Enter your message here">
-      <button id="textsubmit">Send</button>
-    </div>
-    <hr />
-    <div id="chatroom" style="width: 3200px; height: 1000px"></div>
-    <hr />
     <script type="module" src="{% static 'js/room.js' %}"></script>
   </body>
 </html>

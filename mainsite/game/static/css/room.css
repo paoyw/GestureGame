@@ -1,31 +1,148 @@
+/* room.css */
+
+/* Main container */
+.container {
+  display: flex;
+  height: 100vh; /* Set container height to viewport height */
+}
+
+/* Left side (game state area, game area with map, video) */
+.left-side {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 10px;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  margin-bottom: 50px;
+}
+
+/* Game area wrapper */
+.game-area-wrapper {
+  display: flex;
+  flex-direction: row; /* Align game area, webcam, and map horizontally */
+  align-items: flex-start; /* Align items to the top */
+}
+
+/* Game area canvas */
+#game-area-canvas {
+  background-color: #2e3440; /* Dark blue background */
+  flex: 1; /* Use remaining space */
+  height: 500px;
+  width: 800px;
+}
+
+/* Webcam and game map container */
+.webcam-and-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px; /* Space between game area and webcam/map */
+}
+
+/* Game map canvas */
+#game-map-canvas {
+  background-color: #3b4252; /* Darker blue background */
+  height: 100px;
+  width: 160px;
+}
+
+/* Webcam container */
+.videoView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px; /* Space between webcam and map */
+}
+
 video {
   clear: both;
   display: block;
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
+  height:200px;
 }
 
 .webcamCanvas {
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
+  height:200px;
 }
 
 #webcamBlock {
-  position: absolute;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
+  height:200px;
 }
 
 #webcam {
   position: absolute;
+  height:200px;
 }
 
 #webcamButton {
-  margin: 5px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   display: none;
+  width: 160px;
 }
+
+/* Right side (chatroom) */
+.right-side {
+  width: 300px;
+  padding: 10px;
+}
+
+/* Chatroom */
+#chatroom {
+  flex: 1;
+  background-color: #f9fafb; /* Light gray background */
+  border: 1px solid #cbd5e0; /* Light gray border */
+  border-radius: 5px;
+  padding: 10px;
+  overflow-y: auto; /* Enable vertical scrollbar if content exceeds chatroom height */
+  height: 400px;
+}
+
+/* Chat input form */
+.form-container {
+  display: flex;
+  margin-top: 10px;
+}
+
+#draft {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #cbd5e0; /* Light gray border */
+  border-radius: 5px;
+}
+
+#textsubmit {
+  padding: 5px 10px;
+  border: 1px solid #cbd5e0; /* Light gray border */
+  background-color: #88c0d0; /* Light blue background */
+  color: white;
+  border-radius: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+/* Game state area */
+.game-state-text {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  background-color: #f0f4f8; /* Light blue background */
+  border: 1px solid #cbd5e0; /* Light gray border */
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-y: auto; /* Enable vertical scrollbar if content exceeds div height */
+  white-space: pre-wrap; /* Preserve line breaks and wrap text */
+  margin-top: 10px; /* Add space above the game state text */
+}
+

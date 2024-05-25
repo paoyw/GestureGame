@@ -97,9 +97,28 @@ function cal_frame() {
 }
 
 function render(game_state) {
-  document.getElementById("game-state-text").innerText =
-    JSON.stringify(game_state);
-  // TODO: Renders the game state.
+  // Format game state data for display
+  let gameStateText = "";
+  const users = game_state.users;
+  for (const userId in users) {
+    const user = users[userId];
+    gameStateText += `  Username: ${user.username}\n`;
+    gameStateText += `  X: ${user.x}\n`;
+    gameStateText += `  Y: ${user.y}\n`;
+    gameStateText += `  Theta: ${user.theta}\n`;
+    gameStateText += `  Delta X: ${user.delta_x}\n`;
+    gameStateText += `  Delta Y: ${user.delta_y}\n`;
+    gameStateText += `  Fire: ${user.fire}\n`;
+    gameStateText += `  Fire Timer: ${user.fire_timer}\n`;
+    gameStateText += `  Radius: ${user.radius}\n`;
+    gameStateText += `  Max Health: ${user.max_health}\n`;
+    gameStateText += `  Health: ${user.health}\n\n`; // Add a newline after each user's data
+  }
+
+  // Update the game state textarea
+  document.getElementById("game-state-text").innerText = gameStateText;
+
+  // Clear the canvases
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   map_ctx.clearRect(0, 0, map_canvas.width, map_canvas.height);
 
