@@ -16,16 +16,14 @@ const map_ctx = map_canvas.getContext("2d");
 var uid = undefined;
 var masterInterval = undefined;
 
-var socket_pool = []
+var socket_pool = [];
 
-
-setInterval(function() {
+setInterval(function () {
   while (socket_pool.length > 0) {
-      const message = socket_pool.shift(); 
-      webSocket.send(message);
+    const message = socket_pool.shift();
+    webSocket.send(message);
   }
-}, 50); 
-
+}, 50);
 
 function getCookie(cname) {
   let name = cname + "=";
@@ -44,25 +42,39 @@ function getCookie(cname) {
 }
 
 // Chat room region
-document.addEventListener('DOMContentLoaded', (event) => {
-  document.querySelector('#draft').focus();
+document.addEventListener("DOMContentLoaded", (event) => {
+  document.querySelector("#draft").focus();
 
-  document.querySelector('#draft').onkeyup = function (e) {
-      if (e.keyCode === 13) {  // Enter key is pressed
-          document.querySelector('#textsubmit').click();
-      }
+  document.querySelector("#draft").onkeyup = function (e) {
+    if (e.keyCode === 13) {
+      // Enter key is pressed
+      document.querySelector("#textsubmit").click();
+    }
   };
 
-  document.querySelector('#textsubmit').onclick = function (e) {
-      var messageInput = document.querySelector("#draft").value;
-      socket_pool.push(JSON.stringify({ message: messageInput, uid : uid , "procedure-code": "textprocessing"}));
+  document.querySelector("#textsubmit").onclick = function (e) {
+    var messageInput = document.querySelector("#draft").value;
+    socket_pool.push(
+      JSON.stringify({
+        message: messageInput,
+        uid: uid,
+        "procedure-code": "textprocessing",
+      })
+    );
   };
 });
-  
+
 //
 
 function setuid(new_uid) {
   uid = new_uid;
+  socket_pool.push(
+    JSON.stringify({
+      message: "I am a new player!",
+      uid: uid,
+      "procedure-code": "textprocessing",
+    })
+  );
 }
 
 function setmasteruid() {
@@ -80,7 +92,7 @@ function getusername(username) {
 }
 
 function cal_frame() {
-  socket_pool.push(JSON.stringify({ uid: uid, "procedure-code": "cal_frame"}));
+  socket_pool.push(JSON.stringify({ uid: uid, "procedure-code": "cal_frame" }));
   // webSocket.send(JSON.stringify({ uid: uid, "procedure-code": "cal_frame"}));
 }
 
@@ -165,7 +177,7 @@ function render(game_state) {
       const_values.HEALTH_HEIGHT
     );
     ctx.fill();
-    
+
     ctx.fillStyle = const_values.USERNAME_COLOR;
     ctx.font = const_values.USERNAME_FONT;
     ctx.fillText(
@@ -178,16 +190,16 @@ function render(game_state) {
 
 function setact(act) {
   webSocket.send(
-    JSON.stringify({ uid: uid, "procedure-code": "setact", action: act})
+    JSON.stringify({ uid: uid, "procedure-code": "setact", action: act })
   );
 }
 
-function show_text(username, message){
+function show_text(username, message) {
   var node = document.createElement("div");
   const textnode = document.createTextNode(username + " : " + message);
-  node.appendChild(textnode)
-  document.querySelector('#draft').value = "";
-  document.getElementById("chatroom").appendChild(node)
+  node.appendChild(textnode);
+  document.querySelector("#draft").value = "";
+  document.getElementById("chatroom").appendChild(node);
 }
 
 class SetActNotifier {
@@ -197,11 +209,6 @@ class SetActNotifier {
     };
   }
 }
-window.onload = function() {
-  setTimeout(function() {
-    socket_pool.push(JSON.stringify({ message: "I am a new player!", uid : uid , "procedure-code": "textprocessing"}));
-  }, 50);
-};
 
 registeredNotifiers.push(new SetActNotifier());
 
@@ -221,9 +228,9 @@ webSocket.onmessage = function (e) {
       getusername(getCookie("username"));
       break;
     case "textprint":
-      show_text(data['username'], data['message']);
+      show_text(data["username"], data["message"]);
       break;
-    default :
+    default:
       alert("this should not happen");
   }
 };
