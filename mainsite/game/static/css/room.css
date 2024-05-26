@@ -1,5 +1,11 @@
 /* room.css */
 
+/* Add background image */
+body {
+  background: url("../images/background.jpg") no-repeat center center fixed; 
+  background-size: cover;
+}
+
 /* Main container */
 .container {
   display: flex;
@@ -9,11 +15,12 @@
 /* Left side (game state area, game area with map, video) */
 .left-side {
   display: flex;
+  height: 100vh;
   flex-direction: column;
   flex: 1;
   padding: 10px;
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  margin-bottom: 50px;
+  background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background for better readability */
 }
 
 /* Game area wrapper */
@@ -29,21 +36,24 @@
   flex: 1; /* Use remaining space */
   height: 500px;
   width: 800px;
+  border-radius: 5px; /* Rounded corners */
 }
 
 /* Webcam and game map container */
 .webcam-and-map {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   margin-left: 10px; /* Space between game area and webcam/map */
 }
 
 /* Game map canvas */
 #game-map-canvas {
   background-color: #3b4252; /* Darker blue background */
-  height: 100px;
-  width: 160px;
+  margin-top: 170px;
+  height: 120px;
+  width: 192px;
+  border-radius: 5px; /* Rounded corners */
 }
 
 /* Webcam container */
@@ -60,26 +70,29 @@ video {
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
-  height:200px;
+  height: 200px;
+  border-radius: 5px; /* Rounded corners */
 }
 
 .webcamCanvas {
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
-  height:200px;
+  height: 200px;
+  border-radius: 5px; /* Rounded corners */
 }
 
 #webcamBlock {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  height:200px;
+  height: 200px;
 }
 
 #webcam {
   position: absolute;
-  height:200px;
+  height: 200px;
+  border-radius: 5px; /* Rounded corners */
 }
 
 #webcamButton {
@@ -88,12 +101,25 @@ video {
   transform: translateX(-50%);
   display: none;
   width: 160px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: 1px solid #cbd5e0; /* Light gray border */
+  background-color: #88c0d0; /* Light blue background */
+  color: white;
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#webcamButton:hover {
+  background-color: #5e81ac; /* Darker blue background on hover */
 }
 
 /* Right side (chatroom) */
 .right-side {
-  width: 300px;
+  width: 250px;
   padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background for better readability */
 }
 
 /* Chatroom */
@@ -101,10 +127,10 @@ video {
   flex: 1;
   background-color: #f9fafb; /* Light gray background */
   border: 1px solid #cbd5e0; /* Light gray border */
-  border-radius: 5px;
+  border-radius: 5px; /* Rounded corners */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrollbar if content exceeds chatroom height */
-  height: 400px;
+  height: 600px;
 }
 
 /* Chat input form */
@@ -117,7 +143,7 @@ video {
   flex: 1;
   padding: 5px;
   border: 1px solid #cbd5e0; /* Light gray border */
-  border-radius: 5px;
+  border-radius: 5px; /* Rounded corners */
 }
 
 #textsubmit {
@@ -125,19 +151,19 @@ video {
   border: 1px solid #cbd5e0; /* Light gray border */
   background-color: #88c0d0; /* Light blue background */
   color: white;
-  border-radius: 5px;
+  border-radius: 5px; /* Rounded corners */
   margin-left: 5px;
   cursor: pointer;
 }
 
 /* Game state area */
 .game-state-text {
-  width: 100%;
+  width: 95%;
   height: 150px;
   padding: 10px;
   background-color: #f0f4f8; /* Light blue background */
   border: 1px solid #cbd5e0; /* Light gray border */
-  border-radius: 5px;
+  border-radius: 5px; /* Rounded corners */
   font-family: Arial, sans-serif;
   font-size: 14px;
   line-height: 1.5;
@@ -145,4 +171,3 @@ video {
   white-space: pre-wrap; /* Preserve line breaks and wrap text */
   margin-top: 10px; /* Add space above the game state text */
 }
-
