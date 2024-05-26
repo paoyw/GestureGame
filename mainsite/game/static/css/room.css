@@ -33,7 +33,6 @@ body {
 /* Game area canvas */
 #game-area-canvas {
   background-color: #2e3440; /* Dark blue background */
-  flex: 1; /* Use remaining space */
   height: 500px;
   width: 800px;
   border-radius: 5px; /* Rounded corners */
