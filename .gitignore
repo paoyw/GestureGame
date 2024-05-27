@@ -3,3 +3,5 @@ __pycache__/
 
 __MACOSX/
 .DS_store
+
+ssl/
