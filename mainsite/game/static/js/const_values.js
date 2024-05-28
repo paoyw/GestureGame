@@ -2,9 +2,9 @@ export const AREA_WIDTH = 1600;
 export const AREA_HEIGHT = 1000;
 export const VIEW_WIDTH = 800;
 export const VIEW_HEIGHT = 500;
-export const MAP_WIDTH = 160;
-export const MAP_HEIGHT = 100;
-export const MAP_SPACESHIP_RADIUS = 2;
+export const MAP_WIDTH = 320;
+export const MAP_HEIGHT = 200;
+export const MAP_SPACESHIP_RADIUS = 6;
 
 export const BACKGROUND_COLOR = "#3b4252";
 export const SPACESHIP_SELF_COLOR = "#88c0d0";
