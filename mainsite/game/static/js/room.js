@@ -4,7 +4,7 @@ import * as const_values from "./const_values.js";
 const roomName = JSON.parse(document.getElementById("room-name").textContent);
 
 const webSocket = new WebSocket(
-  "ws://" + window.location.host + "/ws/game/" + roomName + "/"
+  "wss://" + window.location.host + "/ws/game/" + roomName + "/"
 );
 
 const canvas = document.getElementById("game-area-canvas");
@@ -12,6 +12,8 @@ const ctx = canvas.getContext("2d");
 
 const map_canvas = document.getElementById("game-map-canvas");
 const map_ctx = map_canvas.getContext("2d");
+
+const grid_img = document.getElementById('grid-png');
 
 var uid = undefined;
 var masterInterval = undefined;
@@ -126,15 +128,14 @@ function render(game_state) {
   let origin_x = game_state["users"][uid].x - const_values.VIEW_WIDTH / 2;
   let origin_y = game_state["users"][uid].y - const_values.VIEW_HEIGHT / 2;
 
-  ctx.beginPath();
-  ctx.fillStyle = const_values.BACKGROUND_COLOR;
-  ctx.rect(
+  ctx.drawImage(
+    grid_img,
     0 - origin_x,
     0 - origin_y,
     const_values.AREA_WIDTH,
     const_values.AREA_HEIGHT
-  );
-  ctx.fill();
+  )
+
 
   //Draws bullets.
   for (var i in game_state["bullets"]) {

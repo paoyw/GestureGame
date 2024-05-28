@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -25,8 +26,13 @@ SECRET_KEY = 'django-insecure-u-3ssqy4zy3@ls3ykegtng0f*06#bdtsl$i55+5zd4z#y*ue_(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+if "USE_CSRF_TRUSTED" in os.environ:
+    CSRF_TRUSTED_ORIGINS = [
+        f'http://{os.environ["HOST_NAME"]}:{os.environ["HTTP_PORT"]}',
+        f'https://{os.environ["HOST_NAME"]}:{os.environ["HTTPS_PORT"]}',
+    ]
 
 # Application definition
 
@@ -76,7 +82,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)]
+            'hosts': [('redis', 6379)]
         }
     }
 }

@@ -49,9 +49,9 @@ body {
 /* Game map canvas */
 #game-map-canvas {
   background-color: #3b4252; /* Darker blue background */
-  margin-top: 170px;
-  height: 120px;
-  width: 192px;
+  margin-top: 70px;
+  height: 200px;
+  width: 320px;
   border-radius: 5px; /* Rounded corners */
 }
 
