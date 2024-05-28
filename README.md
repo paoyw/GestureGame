@@ -10,8 +10,14 @@ pip install -r requirements.txt
     ```bash
     docker run --rm -p 6379:6379 redis:7
     ```
-2. Start the back-end
+2. Start the GestureGame Back-end
     ```bash
+    cd mainsite
+    python3 manage.py runserver
+    ```
+3. Start the streaming Back-end
+    ```bash
+    cd streaming
     python3 manage.py runserver
     ```
 
