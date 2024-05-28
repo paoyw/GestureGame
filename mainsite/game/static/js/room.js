@@ -156,6 +156,19 @@ function render(game_state) {
   // Draws spaceships.
   for (var i in game_state["users"]) {
     let spaceShip = game_state["users"][i];
+
+    ctx.fillStyle = const_values.SPACESHIP_GUN_COLOR;
+    ctx.translate(const_values.VIEW_WIDTH / 2, const_values.VIEW_HEIGHT / 2);
+    ctx.rotate(spaceShip.theta);
+    ctx.fillRect(
+      0,
+      -const_values.SPACESHIP_GUN_WIDTH / 2,
+      const_values.SPACESHIP_GUN_LENGTH,
+      const_values.SPACESHIP_GUN_WIDTH
+    );
+    ctx.rotate(-spaceShip.theta);
+    ctx.translate(-const_values.VIEW_WIDTH / 2, -const_values.VIEW_HEIGHT / 2);
+
     ctx.beginPath();
     if (spaceShip["uid"] == uid) {
       ctx.fillStyle = const_values.SPACESHIP_SELF_COLOR;
