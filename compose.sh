@@ -2,7 +2,7 @@
 
 network_name="gesture-game"
 self_signed_ssl=1
-HOST_NAME="ws7.csie.ntu.edu.tw"
+HOST_NAME="localhost"
 HTTP_PORT=5080
 HTTPS_PORT=5443
 
