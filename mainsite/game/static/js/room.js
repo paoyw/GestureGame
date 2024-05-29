@@ -13,7 +13,8 @@ const ctx = canvas.getContext("2d");
 const map_canvas = document.getElementById("game-map-canvas");
 const map_ctx = map_canvas.getContext("2d");
 
-const grid_img = document.getElementById('grid-png');
+const grid_img = document.getElementById("grid-png");
+const laser_sound = document.getElementById("laser-sound");
 
 var uid = undefined;
 var masterInterval = undefined;
@@ -134,8 +135,7 @@ function render(game_state) {
     0 - origin_y,
     const_values.AREA_WIDTH,
     const_values.AREA_HEIGHT
-  )
-
+  );
 
   //Draws bullets.
   for (var i in game_state["bullets"]) {
@@ -177,6 +177,15 @@ function render(game_state) {
     } else {
       ctx.fillStyle = const_values.SPACESHIP_OPPO_COLOR;
       map_ctx.fillStyle = const_values.SPACESHIP_OPPO_COLOR;
+    }
+
+    console.log(spaceShip["fire_timer"], const_values.SPACESHIP_FIRE_TIME);
+    if (
+      spaceShip["uid"] == uid &&
+      spaceShip["fire_timer"] ==const_values.SPACESHIP_FIRE_TIME
+    ) {
+      console.log(spaceShip);
+      laser_sound.cloneNode(true).play();
     }
 
     ctx.lineWidth = 1e-15;
