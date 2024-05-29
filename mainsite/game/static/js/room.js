@@ -159,7 +159,7 @@ function render(game_state) {
     let spaceShip = game_state["users"][i];
 
     ctx.fillStyle = const_values.SPACESHIP_GUN_COLOR;
-    ctx.translate(const_values.VIEW_WIDTH / 2, const_values.VIEW_HEIGHT / 2);
+    ctx.translate(spaceShip.x - origin_x, spaceShip.y - origin_y);
     ctx.rotate(spaceShip.theta);
     ctx.fillRect(
       0,
@@ -168,7 +168,7 @@ function render(game_state) {
       const_values.SPACESHIP_GUN_WIDTH
     );
     ctx.rotate(-spaceShip.theta);
-    ctx.translate(-const_values.VIEW_WIDTH / 2, -const_values.VIEW_HEIGHT / 2);
+    ctx.translate(-spaceShip.x + origin_x, -spaceShip.y + origin_y);
 
     ctx.beginPath();
     if (spaceShip["uid"] == uid) {
