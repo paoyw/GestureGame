@@ -13,6 +13,7 @@ export const SPACESHIP_GUN_COLOR = "#c0c8cf";
 export const SPACESHIP_GUN_WIDTH = 25;
 export const SPACESHIP_GUN_LENGTH = 50;
 export const SPACESHIP_FIRE_TIME = 5;
+export const SPACESHIP_ALARM_HEALTH = 25;
 export const HEALTH_COLOR = "#a3be8c";
 export const HEALTH_X_SHIFT = -30;
 export const HEALTH_Y_SHIFT = -45;

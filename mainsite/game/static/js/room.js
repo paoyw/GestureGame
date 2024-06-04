@@ -15,6 +15,8 @@ const map_ctx = map_canvas.getContext("2d");
 
 const grid_img = document.getElementById("grid-png");
 const laser_sound = document.getElementById("laser-sound");
+const alarm_sound = document.getElementById("alarm-sound");
+const background_sound = document.getElementById("background-sound");
 
 var uid = undefined;
 var masterInterval = undefined;
@@ -179,13 +181,26 @@ function render(game_state) {
       map_ctx.fillStyle = const_values.SPACESHIP_OPPO_COLOR;
     }
 
-    console.log(spaceShip["fire_timer"], const_values.SPACESHIP_FIRE_TIME);
     if (
       spaceShip["uid"] == uid &&
-      spaceShip["fire_timer"] ==const_values.SPACESHIP_FIRE_TIME
+      spaceShip["fire_timer"] == const_values.SPACESHIP_FIRE_TIME
     ) {
-      console.log(spaceShip);
-      laser_sound.cloneNode(true).play();
+      let spawn = laser_sound.cloneNode(true);
+      console.log(spawn.volume);
+      spawn.volume = 0.1;
+      spawn.play();
+      console.log(spawn.volume);
+    }
+
+    if (
+      spaceShip["uid"] == uid
+    ) {
+      if (spaceShip["health"] <= const_values.SPACESHIP_ALARM_HEALTH) {
+        alarm_sound.play();
+      }
+      else {
+        alarm_sound.pause();
+      }
     }
 
     ctx.lineWidth = 1e-15;
