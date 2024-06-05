@@ -15,11 +15,7 @@ pip install -r requirements.txt
     cd mainsite
     python3 manage.py runserver
     ```
-3. Start the streaming Back-end
-    ```bash
-    cd streaming
-    python3 manage.py runserver
-    ```
+
 
 ## Folder structure
 ```
